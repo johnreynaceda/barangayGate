@@ -17,6 +17,7 @@
             display: none !important;
         }
     </style>
+    @wireUiScripts()
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @livewireScripts
@@ -248,8 +249,13 @@
                     <div class="relative flex-shrink-0 ml-5" @click.away="open = false" x-data="{ open: false }">
                         <div>
                             <button @click="open = !open" class="flex space-x-3 items-center group">
-                                <img src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80""
-                                    class="h-12 w-12 rounded-full object-cover bg-blue-400" alt="">
+                                @if (auth()->user()->profile_path != null)
+                                    <img src="{{ Storage::url(auth()->user()->profile_path) }}"
+                                        class="h-12 w-12 rounded-full object-cover " alt="">
+                                @else
+                                    <img src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+                                        class="h-12 w-12 rounded-full object-cover " alt="">
+                                @endif
                                 <div class="flex space-x-5 items-center ">
                                     <div class="flex flex-col text-left">
                                         <h1 class="font-bold group-hover:text-blue-700 uppercase">
@@ -278,15 +284,12 @@
                             class="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                             tabindex="-1" style="display: none;">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem"
-                                tabindex="-1" id="user-menu-item-0">
+                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-500"
+                                role="menuitem" tabindex="-1" id="user-menu-item-0">
                                 Your Profile
                             </a>
 
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem"
-                                tabindex="-1" id="user-menu-item-1">
-                                Settings
-                            </a>
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a href="#"

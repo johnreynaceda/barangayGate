@@ -41,7 +41,7 @@ class ResidentForm extends Component implements Forms\Contracts\HasForms
                             'Male' => 'Male',
                             'Female' => 'Female',
                         ]),
-                    TextInput::make('age')->required()->numeric(),
+                    TextInput::make('age')->required()->numeric()->mask(fn(TextInput\Mask $mask) => $mask->pattern('000')),
                 ])
                 ->columns(3)
         ];

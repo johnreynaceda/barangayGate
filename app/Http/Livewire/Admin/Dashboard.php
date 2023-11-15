@@ -23,6 +23,7 @@ class Dashboard extends Component implements Tables\Contracts\HasTable
 
     public $cardModal = false;
     public $indigency_modal = false;
+    public $business_modal = false;
     public $requestor_data = [];
 
     protected function getTableQuery(): Builder
@@ -83,12 +84,19 @@ class Dashboard extends Component implements Tables\Contracts\HasTable
                     return $record->status != 'pending';
                 }
             )->action(function ($record) {
-                $this->requestor_data = $record;
-                if ($record->certificate_id == 1) {
+                if ($record->certificate->name == 'Barangay Clearance') {
                     return $this->cardModal = true;
-                } else {
+                } elseif ($record->certificate->name == 'Certificate of Indigency') {
                     return $this->indigency_modal = true;
+                } else {
+                    return $this->business_modal = true;
                 }
+                // $this->requestor_data = $record;
+                // if ($record->certificate_id == 1) {
+                //     return $this->cardModal = true;
+                // } else {
+                //     return $this->indigency_modal = true;
+                // }
             }),
 
             Action::make('archive')->button()->color('gray')->icon('heroicon-o-archive')->action(

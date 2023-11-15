@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Resident;
 
 use App\Http\Livewire\Admin\ResidentList;
+use App\Models\Blotter;
 use App\Models\Certificate;
 use Livewire\Component;
 use App\Models\User;
@@ -30,16 +31,20 @@ class RequestCertificate extends Component implements Tables\Contracts\HasTable
     protected function getTableHeaderActions()
     {
         return [
-            Action::make('new_residents')->label('Add Request')->button()->icon('heroicon-o-plus')->size('md')->action(
-                function ($record, $data) {
-                    requestModel::create([
-                        'certificate_id' => $data['certificate_id'],
-                        'purpose' => $data['purpose'],
-                        'user_id' => auth()->user()->id,
-                    ]);
-                    sweetalert()->addSuccess('Request Added');
+            Action::make('new_residents')->hidden(
+                function ($record) {
+                    return Blotter::where('resident_id', auth()->user()->resident->id)->get()->count() != 0;
                 }
-            )->form(
+            )->label('Add Request')->button()->icon('heroicon-o-plus')->size('md')->action(
+                    function ($record, $data) {
+                        requestModel::create([
+                            'certificate_id' => $data['certificate_id'],
+                            'purpose' => $data['purpose'],
+                            'user_id' => auth()->user()->id,
+                        ]);
+                        sweetalert()->addSuccess('Request Added');
+                    }
+                )->form(
                     [
                         Fieldset::make('REQUEST FORM')
                             ->schema([

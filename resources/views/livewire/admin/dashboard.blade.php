@@ -1,4 +1,4 @@
-<div x-data="{ modal: @entangle('cardModal'), indigency: @entangle('indigency_modal') }">
+<div x-data="{ modal: @entangle('cardModal'), indigency: @entangle('indigency_modal'), business: @entangle('business_modal') }">
     <div class="grid grid-cols-4 gap-5">
         <div class="bg-white rounded-2xl shadow-sm shadow-blue-400 p-8">
             <div class="flex justify-between items-center">
@@ -360,6 +360,163 @@
                             class="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Print
                             Certificate</button>
                         <button type="button" wire:click="$set('indigency_modal', false)"
+                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="business" x-cloak class="relative z-10" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <!--
+          Background backdrop, show/hide based on modal state.
+
+          Entering: "ease-out duration-300"
+            From: "opacity-0"
+            To: "opacity-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100"
+            To: "opacity-0"
+        -->
+        <div x-show="business" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+            x-transition:enter-start="opacity-100" x-transition:enter-end="opacity-0" x-cloak
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <!--
+              Modal panel, show/hide based on modal state.
+
+              Entering: "ease-out duration-300"
+                From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                To: "opacity-100 translate-y-0 sm:scale-100"
+              Leaving: "ease-in duration-200"
+                From: "opacity-100 translate-y-0 sm:scale-100"
+                To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            -->
+                <div x-show="business" x-transition:enter="ease-out duration-300" x-cloak
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:enter-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:enter-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-7xl">
+                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div x-ref="printContainer" class="relative">
+                            <div class="fixed top-0 left-0 w-full h-full">
+                                <div class="grid place-content-center h-full">
+                                    <img src="{{ asset('image/barangayLogo.png') }}"
+                                        class="object-cover h-[40rem] w-[40rem] opacity-10" alt="">
+                                </div>
+                            </div>
+                            <div class="flex space-x-20 justify-center items-start">
+                                <div>
+                                    <img src="{{ asset('image/bulanlogo.jpg') }}" class="h-28" alt="">
+                                </div>
+                                <div class="text-center">
+                                    <h1 class="leading-5">Republic of the Philippines</h1>
+                                    <h1 class=" leading-5">Province of Sorsogon</h1>
+                                    <h1 class="font-bold leading-5">Municipality of Bulan</h1>
+                                    <h1 class="font-bold leading-5">Barangay Gate</h1>
+                                </div>
+                                <div>
+                                    <img src="{{ asset('image/barangayLogo.png') }}" class="h-[7.5rem]"
+                                        alt="">
+                                </div>
+                            </div>
+                            <div class="mt-2 text-center">
+                                <h1 class="text-lg font-semibold">OFFICE OF SANGGUNIANG BARANGAY</h1>
+                            </div>
+                            <div class="mt-5 text-center">
+                                <h1 class="text-4xl font-bold">BARANGAY BUSINESS CLEARANCE</h1>
+                            </div>
+                            <div class="mt-20">
+                                <div class="flex flex-col items-center space-y-3">
+                                    <h1 class="w-96 border-b-2 border-black ">
+                                    </h1>
+                                    <h1 class="leading-3 font-bold">Business Name</h1>
+                                </div>
+                                <div class="mt-10 flex ">
+                                    <div>
+
+                                        <div class="mt-5">
+                                            <h1 class="font-bold">Issued to: <span
+                                                    class="font-normal">___________________________</span>
+                                            </h1>
+                                            <h1 class="font-bold">Location: <span class="font-normal">PUROK_GATE
+                                                    BULAN, SORSOGON</span>
+                                            </h1>
+                                            <h1 class="font-bold">Date Issued: <span class="font-normal">__________
+                                                    __,
+                                                    {{ \Carbon\Carbon::now()->format('Y') }}</span>
+                                            </h1>
+                                            <h1 class="font-bold">Date of Expiration: <span
+                                                    class="font-normal">DECEMBER 31,
+                                                    {{ \Carbon\Carbon::now()->format('Y') }}</span>
+                                            </h1>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-10 flex justify-between">
+                                    <div>
+                                        <h1>Attested by:</h1>
+                                        <div class="mt-5">
+                                            <h1 class="font-bold">ANABEL B. MURILLA</h1>
+                                            <span>Barangay Secretary</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-10 flex justify-end">
+                                    <div class="text-center">
+                                        <h1>Certified by:</h1>
+                                        <div class="mt-5">
+                                            <h1 class="font-bold">HON. ANTONIO B. BONCAN</h1>
+                                            <span>Punong Barangay</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-20 grid grid-cols-2 gap-14">
+                                    <div>
+                                        <div class="flex space-x-1">
+                                            <span>Paid under O.R. Number:</span>
+                                            <span class="flex-1 w-full  border-b-2 border-black"></span>
+                                        </div>
+                                        <div class="flex space-x-1">
+                                            <span>Date:</span>
+                                            <span class="flex-1 w-full  border-b-2 border-black"></span>
+                                        </div>
+                                        <div class="flex space-x-1">
+                                            <span>NOTE: NOT VALID WITHOUT OFFICIAL SEAL</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex space-x-1">
+                                            <span>CTC Number:</span>
+                                            <span class="flex-1 w-full  border-b-2 border-black"></span>
+                                        </div>
+                                        <div class="flex space-x-1">
+                                            <span>Issued On:</span>
+                                            <span class="flex-1 w-full  border-b-2 border-black"></span>
+                                        </div>
+                                        <div class="flex space-x-1">
+                                            <span>Place of issuance:</span>
+                                            <span class="flex-1 w-full  border-b-2 border-black"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50  relative px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" @click="printOut($refs.printContainer.outerHTML);"
+                            class="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Print
+                            Certificate</button>
+                        <button type="button" wire:click="$set('business_modal', false)"
                             class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
                     </div>
                 </div>
