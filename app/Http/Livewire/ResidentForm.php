@@ -22,16 +22,26 @@ class ResidentForm extends Component implements Forms\Contracts\HasForms
         return [
             Fieldset::make('COMPLETE RESIDENTS INFORMATION')
                 ->schema([
-                    TextInput::make('firstname')->required(),
-                    TextInput::make('middlename')->required(),
-                    TextInput::make('lastname')->required(),
-                    TextInput::make('purok')->required(),
-                    Select::make('gender')->required()
+                    TextInput::make('firstname')->required()->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^a-zA-Z]/g, "")']),
+                    TextInput::make('middlename')->required()->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^a-zA-Z]/g, "")']),
+                    TextInput::make('lastname')->required()->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^a-zA-Z]/g, "")']),
+                    Select::make('purok')->required()->label('Purok')
+                        ->options([
+                            'Purok 1' => 'Purok 1',
+                            'Purok 2' => 'Purok 2',
+                            'Purok 3' => 'Purok 3',
+                            'purok 4' => 'Purok 4',
+                            'purok 5' => 'Purok 5',
+                            'Purok 6' => 'Purok 6',
+                            'Purok 7' => 'Purok 7',
+                            'Purok 8' => 'Purok 8',
+                        ]),
+                    Select::make('gender')->required()->label('Sex')
                         ->options([
                             'Male' => 'Male',
                             'Female' => 'Female',
                         ]),
-                    TextInput::make('age')->required(),
+                    TextInput::make('age')->required()->numeric(),
                 ])
                 ->columns(3)
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Filament\Tables\Columns\BadgeColumn;
 use Livewire\Component;
 use App\Models\RequestCertificate;
 use Illuminate\Contracts\View\View;
@@ -26,7 +27,7 @@ class Dashboard extends Component implements Tables\Contracts\HasTable
 
     protected function getTableQuery(): Builder
     {
-        return RequestCertificate::query()->orderBy('created_at', 'DESC');
+        return RequestCertificate::query()->where('status', '!=', 'archived')->orderBy('created_at', 'DESC');
     }
 
     protected function getTableColumns(): array
@@ -40,7 +41,16 @@ class Dashboard extends Component implements Tables\Contracts\HasTable
             TextColumn::make('certificate.name')->label('CERTIFICATE')->searchable(),
             TextColumn::make('purpose')->label('PURPOSE')->searchable(),
             TextColumn::make('created_at')->label('REQUEST DATE')->date()->searchable(),
-            TextColumn::make('status')->label('STATUS')->searchable(),
+            BadgeColumn::make('status')->label('STATUS')->searchable()
+                ->enum([
+                    'pending' => 'Pending',
+                    'approved' => 'Approved',
+                    'declined' => 'Declined',
+                ])->colors([
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger' => 'declined'
+                    ])
         ];
     }
     protected function getTableActions(): array
@@ -75,11 +85,20 @@ class Dashboard extends Component implements Tables\Contracts\HasTable
             )->action(function ($record) {
                 $this->requestor_data = $record;
                 if ($record->certificate_id == 1) {
-                    $this->cardModal = true;
+                    return $this->cardModal = true;
                 } else {
-                    $this->indigency_modal = true;
+                    return $this->indigency_modal = true;
                 }
             }),
+
+            Action::make('archive')->button()->color('gray')->icon('heroicon-o-archive')->action(
+                function ($record) {
+                    $record->update([
+                        'status' => 'archived',
+                    ]);
+                    sweetalert()->addSuccess('Moved to Archive');
+                }
+            ),
 
         ];
     }

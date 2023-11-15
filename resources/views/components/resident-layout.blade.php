@@ -148,10 +148,7 @@
                                     Your Profile
                                 </a>
 
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem"
-                                    tabindex="-1" id="user-menu-item-1">
-                                    Settings
-                                </a>
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <a href="#"

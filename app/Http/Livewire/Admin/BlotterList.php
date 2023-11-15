@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Blotter;
 use App\Models\Resident;
+use Filament\Forms\Components\DatePicker;
 use Livewire\Component;
 use App\Models\User;
 use Filament\Tables;
@@ -15,6 +16,7 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 
 class BlotterList extends Component implements Tables\Contracts\HasTable
 {
@@ -94,6 +96,29 @@ class BlotterList extends Component implements Tables\Contracts\HasTable
             Tables\Actions\DeleteAction::make(),
         ];
     }
+    protected function getTableFilters(): array
+    {
+        return [
+            Filter::make('created_at')
+                ->form([
+                    DatePicker::make('created_from'),
+                    DatePicker::make('created_until'),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query
+                        ->when(
+                            $data['created_from'],
+                            fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                        )
+                        ->when(
+                            $data['created_until'],
+                            fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                        );
+                })
+
+        ];
+    }
+
 
     public function render()
     {
